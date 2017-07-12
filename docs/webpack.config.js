@@ -1,39 +1,72 @@
-var path = require('path')
-
+const path = require('path');
 
 module.exports = {
   devtool: 'source-map',
   entry: require.resolve('./App.js'),
-  cache: false,
   output: {
     path: __dirname,
     filename: 'bundle.js',
     publicPath: '/docs/'
   },
+  cache: false,
 
-  resolve: {
-    extensions: ['', '.js', 'json'],
-    alias: {
-      components: path.resolve(__dirname, './components'),
-      react: path.resolve(__dirname, '../node_modules/react')
-    }
+  resolveLoader: {
+    modules: ['node_modules', path.resolve(__dirname, 'loaders')]
   },
 
   module: {
-    loaders: [
-      { test: /\.json$/,  loader: 'json-loader' },
-      { test: /\.css$/,  loader: 'style-loader!css-loader' },
-      { test: /\.less$/, loader: 'style-loader!css-loader!less-loader' },
-
+    rules: [
+      {
+        test: /\.json$/,
+        use: { loader: 'json-loader' }
+      },
+      {
+        test: /\.css$/,
+        use: [
+          { loader: 'style-loader' },
+          { loader: 'css-loader' }
+        ]
+      },
+      {
+        test: /\.less$/,
+        use: [
+          { loader: 'style-loader' },
+          { loader: 'css-loader' },
+          { loader: 'less-loader' }
+        ]
+      },
       {
         test: /\.jsx$|\.js$/,
-        loader: 'babel-loader',
+        use: { loader: 'babel-loader' },
         exclude: /node_modules/
       },
-      { test: /\.gif$/, loader: 'url-loader?mimetype=image/png' },
-      { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url-loader?limit=10000&minetype=application/font-woff' },
-      { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader?name=[name].[ext]' },
-      { test: /\.md$/,  loader: 'babel-loader!' + path.join(__dirname, './loaders/jsx') }
+      {
+        test: /\.gif$/,
+        use: { loader: 'url-loader?mimetype=image/png' }
+      },
+      {
+        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        use: { loader: 'url-loader?limit=10000&minetype=application/font-woff' }
+      },
+      {
+        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        use: { loader: 'file-loader?name=[name].[ext]' }
+      },
+      {
+        test: /\.md$/,
+        use: [
+          { loader: 'babel-loader' },
+          { loader: 'jsx' }
+        ]
+      },
     ]
+  },
+
+  resolve: {
+    alias: {
+      components: path.resolve(__dirname, './components'),
+      react: path.resolve(__dirname, '../node_modules/react')
+    },
+    extensions: ['.js', 'json'],
   }
-}
+};
