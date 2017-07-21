@@ -10,12 +10,14 @@
     "react"
   ],
 
-  "ecmaFeatures": {
-    "modules": true,
-    "jsx": true
-  },
-
   "parser": "babel-eslint",
+
+  "parserOptions": {
+    "ecmaFeatures": {
+      "modules": true,
+      "jsx": true
+    }
+  },
 
   "rules": {
     "camelcase": [2, {"properties": "never"}],
